@@ -4,6 +4,6 @@
     {
         public string Address { get; set; }
 
-        public IList<ProductDTO> Cart { get; set; } = new List<ProductDTO>();
+        public ICollection<OrderDTO> Cart { get; set; } = new List<OrderDTO>();
     }
 }

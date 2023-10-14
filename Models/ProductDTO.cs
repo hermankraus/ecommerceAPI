@@ -10,5 +10,8 @@
 
         public decimal Price { get; set; } = 0;
 
+        public int Stock { get; set; }
+
+
     }
 }

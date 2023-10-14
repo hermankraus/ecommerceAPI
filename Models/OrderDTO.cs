@@ -1,6 +1,6 @@
 ﻿namespace ecommerceAPI.Models
 {
-    public class OrdersDTO
+    public class OrderDTO
     {
         public int Id { get; set; }
 
@@ -9,6 +9,6 @@
         public bool Status { get; set; }
 
 
-        public IList<ProductDTO> Products { get; set; } = new List<ProductDTO>(); 
+        public ICollection<ProductDTO> Products { get; set; } = new List<ProductDTO>(); 
     }
 }
