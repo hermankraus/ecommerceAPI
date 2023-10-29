@@ -4,7 +4,7 @@ namespace ecommerceAPI.Entities
 {
     public class Customer : User
     {
-        public string Address { get; set; }
-        public object? Order { get; internal set; }
+        public string? Address { get; set; }
+        
     }
 }
