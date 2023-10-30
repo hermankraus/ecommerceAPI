@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ecommerceAPI.DBContexts;
 
@@ -10,9 +11,11 @@ using ecommerceAPI.DBContexts;
 namespace ecommerceAPI.Migrations
 {
     [DbContext(typeof(EcommerceContext))]
-    partial class EcommerceContextModelSnapshot : ModelSnapshot
+    [Migration("20231030220107_ThirdMigration")]
+    partial class ThirdMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
@@ -85,7 +88,7 @@ namespace ecommerceAPI.Migrations
 
             modelBuilder.Entity("ecommerceAPI.Entities.User", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -116,22 +119,6 @@ namespace ecommerceAPI.Migrations
                     b.HasBaseType("ecommerceAPI.Entities.User");
 
                     b.HasDiscriminator().HasValue("Admin");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Email = "ezequias@test.com",
-                            Name = "Ezequias",
-                            Password = "Password"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Email = "Herman@test.com",
-                            Name = "Herman",
-                            Password = "Password"
-                        });
                 });
 
             modelBuilder.Entity("ecommerceAPI.Entities.Customer", b =>
@@ -142,16 +129,6 @@ namespace ecommerceAPI.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasDiscriminator().HasValue("Customer");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 3,
-                            Email = "juan@test.com",
-                            Name = "Juan",
-                            Password = "Password",
-                            Address = "Fake Street 123"
-                        });
                 });
 
             modelBuilder.Entity("ecommerceAPI.Entities.Order", b =>

@@ -35,15 +35,51 @@ namespace ecommerceAPI.DBContexts
             .Property(op => op.Quantity)
             .IsRequired();
 
-        modelBuilder.Entity<User>()
-            .HasDiscriminator<string>("UserType")
-            .HasValue<Customer>("Customer")
-            .HasValue<Admin>("Admin");
+            modelBuilder.Entity<User>()
+                .HasDiscriminator<string>("UserRole")
+                .HasValue<Customer>("Customer")
+                .HasValue<Admin>("Admin");
+            modelBuilder.Entity<Admin>().HasData(
+                new Admin
+                {   Id = 1,
+                    Name = "Ezequias",
+                    Email = "ezequias@test.com",
+                    Password = "Password"
+                },
+                 new Admin
+                 {
+                     Id=2,
+                     Name = "Herman",
+                     Email = "Herman@test.com",
+                     Password = "Password"
+                 });
+               modelBuilder.Entity<Customer>()
+               .HasData(
+               new Customer
+               {   
+                   Id = 3,
+                   Name = "Juan",
+                   Email = "juan@test.com",
+                   Password = "Password",
+                   Address = "Fake Street 123"
+               });
 
         modelBuilder.Entity<Order>()
             .HasOne(o => o.User)
             .WithMany(u => u.Order)
             .HasForeignKey(o => o.UserId);
+
+
+            modelBuilder.Entity<Product>().HasData(
+                new Product
+                {
+                    Id = 1,
+                    Name = "Test",
+                    Description = "Test desc",
+                    Price = 1.25
+                }
+                );
+            
     }
 }
 
