@@ -15,11 +15,10 @@ namespace ecommerceAPI.DBContexts
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Admin> Admins { get; set; }
     public DbSet<User> Users { get; set; }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<OrderProduct>()
-            .HasKey(op => new { op.OrderId, op.ProductId });
+            .HasKey(op => new { op.OrderId, op.ProductId }); // agrega key para customer service
 
         modelBuilder.Entity<OrderProduct>()
             .HasOne(op => op.Order)
