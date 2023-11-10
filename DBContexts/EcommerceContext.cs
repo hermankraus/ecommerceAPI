@@ -43,6 +43,7 @@ namespace ecommerceAPI.DBContexts
                     Name = "Ezequias",
                     Email = "ezequias@test.com",
                     Password = "Password"
+
                 },
                  new Admin
                  {

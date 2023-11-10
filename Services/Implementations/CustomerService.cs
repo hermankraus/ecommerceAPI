@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using ecommerceAPI.DBContexts;
 using ecommerceAPI.Entities;
+using ecommerceAPI.Models;
+using ecommerceAPI.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-public class CustomerService : ICustomerService
+public class CustomerService : ICustomerService, IUserService
 {
     private readonly EcommerceContext _context;
 
@@ -55,6 +57,48 @@ public class CustomerService : ICustomerService
 
         _context.Orders.Update(order);
         _context.SaveChanges();
+    }
+
+    public void CreateUser(UserDTO userDTO)
+    {
+        var user = new Customer
+        {
+            Name = userDTO.Name,
+            Email = userDTO.Email,
+            Password = userDTO.Password,
+            Address = userDTO.Address,
+            UserRole = "Customer",
+
+        };
+
+        _context.Add(user);
+        _context.SaveChanges();
+    }
+
+    public void UpdateUser(UserDTO userDTO)
+    {
+        var user = new Customer
+        {
+            Name = userDTO.Name,
+            Email = userDTO.Email,
+            Password = userDTO.Password,
+            Address = userDTO.Address,
+            UserRole = "Customer",
+
+        };
+
+        _context.Update(user);
+        _context.SaveChanges();
+
+    }
+
+    public void DeleteUser(int userId)
+    {
+        User userToDelete = _context.Users.FirstOrDefault(u => u.Id == userId);
+        userToDelete.State = false;
+        _context.Update(userToDelete);
+        _context.SaveChanges();
+
     }
 
     public List<Order> GetOrderHistory(int userId)

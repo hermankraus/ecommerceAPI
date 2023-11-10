@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ecommerceAPI.DBContexts;
 
@@ -10,9 +11,11 @@ using ecommerceAPI.DBContexts;
 namespace ecommerceAPI.Migrations
 {
     [DbContext(typeof(EcommerceContext))]
-    partial class EcommerceContextModelSnapshot : ModelSnapshot
+    [Migration("20231110002058_userState")]
+    partial class userState
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
@@ -89,9 +92,6 @@ namespace ecommerceAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Address")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");
 
@@ -146,6 +146,9 @@ namespace ecommerceAPI.Migrations
                 {
                     b.HasBaseType("ecommerceAPI.Entities.User");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("TEXT");
+
                     b.HasDiscriminator().HasValue("Customer");
 
                     b.HasData(
@@ -155,7 +158,8 @@ namespace ecommerceAPI.Migrations
                             Email = "juan@test.com",
                             Name = "Juan",
                             Password = "Password",
-                            State = true
+                            State = true,
+                            Address = "Fake Street 123"
                         });
                 });
 

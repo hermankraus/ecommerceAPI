@@ -61,6 +61,49 @@ namespace ecommerceAPI.Services.Implementations
                 _context.Products.Remove(productToDelete);
                 _context.SaveChanges();
             }
+
+        }
+
+        public void CreateUser(UserDTO userDTO)
+        {
+            var user = new Admin
+            {
+                Name = userDTO.Name,
+                Email = userDTO.Email,
+                Password = userDTO.Password,
+                Address = userDTO.Address,
+                UserRole = "Admin",
+
+            }; 
+                
+            _context.Add(user);
+            _context.SaveChanges();
+        }
+
+        public void UpdateUser(UserDTO userDTO)
+        {
+            var user = new Admin
+            {
+                Name = userDTO.Name,
+                Email = userDTO.Email,
+                Password = userDTO.Password,
+                Address = userDTO.Address,
+                UserRole = "Admin",
+
+            };
+
+            _context.Update(user);
+            _context.SaveChanges();
+
+        }
+
+        public void DeleteUser(int userId)
+        {
+            User userToDelete = _context.Users.FirstOrDefault(u => u.Id == userId);
+            userToDelete.State = false;
+            _context.Update(userToDelete);
+            _context.SaveChanges();
+
         }
 
         public List<Customer> GetAllCustomers()
