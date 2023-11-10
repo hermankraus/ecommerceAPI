@@ -1,5 +1,6 @@
 ﻿using ecommerceAPI.DBContexts;
 using ecommerceAPI.Entities;
+using ecommerceAPI.Models;
 
 namespace ecommerceAPI.Services.Implementations
 {
@@ -23,14 +24,21 @@ namespace ecommerceAPI.Services.Implementations
             return _context.Products.FirstOrDefault(p => p.Id == id);
         }
 
-        public void AddProduct(Product product)
+        public void AddProduct(ProductDTO productDTO)
         {
-            if (product == null)
+            if (productDTO == null)
             {
-                throw new ArgumentNullException(nameof(product));
+                throw new ArgumentNullException(nameof(productDTO));
             }
 
-            _context.Products.Add(product);
+            var product = new Product
+            {
+                Name = productDTO.Name,
+                Description = productDTO.Description,
+                Price = productDTO.Price,
+            };
+
+            _context.Add(product);
             _context.SaveChanges();
         }
 
@@ -53,6 +61,11 @@ namespace ecommerceAPI.Services.Implementations
                 _context.Products.Remove(productToDelete);
                 _context.SaveChanges();
             }
+        }
+
+        public List<Customer> GetAllCustomers()
+        {
+            return _context.Customers.ToList(); 
         }
     }
 }

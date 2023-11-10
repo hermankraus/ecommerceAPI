@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ecommerceAPI.Entities;
 using Microsoft.AspNetCore.Authorization;
+using ecommerceAPI.Models;
 
 namespace ecommerceAPI.Controllers
 {
@@ -10,10 +11,11 @@ namespace ecommerceAPI.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IAdminService _adminService;
-
+        
         public AdminController(IAdminService adminService)
         {
             _adminService = adminService;
+            
         }
 
         [HttpGet ("GetProducts")]
@@ -35,12 +37,13 @@ namespace ecommerceAPI.Controllers
         }
 
         [HttpPost("AddProduct")]
-        public ActionResult AddProduct(Product product)
+        public IActionResult AddProduct(ProductDTO product)
         {
             try
             {
                 _adminService.AddProduct(product);
-                return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
+                //return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
+                return Ok();
             }
             catch (ArgumentNullException)
             {
@@ -79,6 +82,12 @@ namespace ecommerceAPI.Controllers
             {
                 return NotFound();
             }
+        }
+        [HttpGet ("GetAllCustomers")]
+        public IActionResult GetAllCustomers() {
+            var customers = _adminService.GetAllCustomers();
+            
+            return Ok(customers);
         }
     }
 }
