@@ -61,22 +61,6 @@ public class CustomerService : ICustomerService, IUserService
         _context.SaveChanges();
     }
 
-    public void CreateUser(UserDTO userDTO)
-    {
-        var user = new Customer
-        {
-            Name = userDTO.Name,
-            Email = userDTO.Email,
-            Password = userDTO.Password,
-            Address = userDTO.Address,
-            UserRole = "Customer",
-
-        };
-
-        _context.Add(user);
-        _context.SaveChanges();
-    }
-
     public void UpdateUser(User userToUpdate)
     {
        

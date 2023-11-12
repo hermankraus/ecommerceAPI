@@ -12,7 +12,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddScoped<IAdminService, AdminService>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -44,9 +43,11 @@ builder.Services.AddDbContext<EcommerceContext>(dbContextOptions => dbContextOpt
 builder.Configuration["DB:ConnectionString"]));
 
 #region Inyecciones
+builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IUserService, CustomerService>();
+builder.Services.AddScoped<INewUserService, NewUserService>();
 
 #endregion
 builder.Services.AddAuthentication("Bearer") //"Bearer" es el tipo de auntenticación que tenemos que elegir después en PostMan para pasarle el token
