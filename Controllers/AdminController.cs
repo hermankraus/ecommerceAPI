@@ -7,7 +7,7 @@ namespace ecommerceAPI.Controllers
 {
     [Route("api/admin/")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AdminController : ControllerBase
     {
         private readonly IAdminService _adminService;

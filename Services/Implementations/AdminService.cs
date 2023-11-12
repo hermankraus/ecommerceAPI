@@ -80,19 +80,10 @@ namespace ecommerceAPI.Services.Implementations
             _context.SaveChanges();
         }
 
-        public void UpdateUser(UserDTO userDTO)
+        public void UpdateUser(User userToUpdate)
         {
-            var user = new Admin
-            {
-                Name = userDTO.Name,
-                Email = userDTO.Email,
-                Password = userDTO.Password,
-                Address = userDTO.Address,
-                UserRole = "Admin",
 
-            };
-
-            _context.Update(user);
+            _context.Update(userToUpdate);
             _context.SaveChanges();
 
         }
