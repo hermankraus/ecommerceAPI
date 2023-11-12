@@ -55,40 +55,41 @@ namespace ecommerceAPI.Controllers
             return Ok(orders);
         }
 
-        // Create customer tiene que ir en un usercontroller porq user solamente va a crear nuevos usuarios
-        /*
-        [HttpPost("createCustomer")]
-        public IActionResult CreateCustomer([FromBody] CustomerDTO dto)
+   
+
+        [HttpPut("UpdateCustomer")]
+
+        public IActionResult UpdateCustomer([FromBody] UserDTO updateCustomer)
         {
-            string role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value.ToString(); ;
-            if (role == "Customer")
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            if (userId == null)
             {
-                return Ok("Cliente creado");
+                return BadRequest();
             }
-            return Forbid();
-        }
-        */
+            var userToUpdate = _userService.GetUser(int.Parse(userId));
+            if (userToUpdate == null)
+            {
+                return BadRequest();
+            }
+            userToUpdate.Name = updateCustomer.Name;
+            userToUpdate.Email = updateCustomer.Email;
+            userToUpdate.Address = updateCustomer.Address;
+            userToUpdate.Password = updateCustomer.Password;
 
-
-        [HttpPut("UpdateCustomer/{updateCustomer}")]
-
-        public IActionResult UpdateCustomer([FromBody] CustomerDTO updateCustomer)
-        {
-        
             string role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
 
             if (role == "Customer")
             {
-                _userService.UpdateUser(updateCustomer);
+                _userService.UpdateUser(userToUpdate);
         
                 return Ok();
             }
             return Forbid();
         }
 
-        [HttpDelete("DeleteCustomer/{userId}")]
+        [HttpDelete("DeleteCustomer")]
 
-        public IActionResult DeleteCustomer(int userId)
+        public IActionResult DeleteCustomer()
         {
             int id = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
 

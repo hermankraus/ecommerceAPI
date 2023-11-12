@@ -10,10 +10,12 @@ using Microsoft.EntityFrameworkCore;
 public class CustomerService : ICustomerService, IUserService
 {
     private readonly EcommerceContext _context;
-
+    
     public CustomerService(EcommerceContext context)
     {
         _context = context;
+        
+        
     }
 
     public Order CreateOrder(int userId)
@@ -75,19 +77,10 @@ public class CustomerService : ICustomerService, IUserService
         _context.SaveChanges();
     }
 
-    public void UpdateUser(UserDTO userDTO)
+    public void UpdateUser(User userToUpdate)
     {
-        var user = new Customer
-        {
-            Name = userDTO.Name,
-            Email = userDTO.Email,
-            Password = userDTO.Password,
-            Address = userDTO.Address,
-            UserRole = "Customer",
-
-        };
-
-        _context.Update(user);
+       
+        _context.Update(userToUpdate);
         _context.SaveChanges();
 
     }
@@ -99,6 +92,17 @@ public class CustomerService : ICustomerService, IUserService
         _context.Update(userToDelete);
         _context.SaveChanges();
 
+    }
+
+    public User GetUser(int userId)
+    {
+
+        var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+        if (user == null)
+        {
+            return null;
+        }
+        return(user);
     }
 
     public List<Order> GetOrderHistory(int userId)

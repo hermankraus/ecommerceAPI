@@ -1,6 +1,7 @@
 using ecommerceAPI.DBContexts;
 using ecommerceAPI.Services;
 using ecommerceAPI.Services.Implementations;
+using ecommerceAPI.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -44,6 +45,8 @@ builder.Configuration["DB:ConnectionString"]));
 
 #region Inyecciones
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IUserService, CustomerService>();
 
 #endregion
 builder.Services.AddAuthentication("Bearer") //"Bearer" es el tipo de auntenticación que tenemos que elegir después en PostMan para pasarle el token
