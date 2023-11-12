@@ -42,7 +42,7 @@ namespace ecommerceAPI.Controllers
             var claimsForToken = new List<Claim>();
             claimsForToken.Add(new Claim("sub", validationResponse.Item2.Id.ToString())); 
             claimsForToken.Add(new Claim("given_name", validationResponse.Item2.Name));
-            //claimsForToken.Add(new Claim("role", validationResponse.Item2.UserRole.ToString()));
+            
             
             if(validationResponse.Item2.UserRole == "Admin")
             {
