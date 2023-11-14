@@ -1,15 +1,14 @@
 ﻿using ecommerceAPI.DBContexts;
 using ecommerceAPI.Entities;
 using ecommerceAPI.Models;
-using ecommerceAPI.Services.Interfaces;
 
 namespace ecommerceAPI.Services.Implementations
 {
 
-    public class AdminService : IAdminService, IUserService
+    public class AdminService : IAdminService
     {
         private readonly EcommerceContext _context;
-        
+
         public AdminService(EcommerceContext context)
         {
             _context = context;
@@ -101,17 +100,6 @@ namespace ecommerceAPI.Services.Implementations
         public List<Customer> GetAllCustomers()
         {
             return _context.Customers.ToList(); 
-        }
-
-        public User GetUser(int userId)
-        {
-
-            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
-            if (user == null)
-            {
-                return null;
-            }
-            return (user);
         }
     }
 }
