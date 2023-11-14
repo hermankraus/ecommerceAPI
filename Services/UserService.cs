@@ -15,7 +15,7 @@ namespace ecommerceAPI.Services
         public Tuple<bool,User?> ValidateUser(string email, string password)
         {
             User? userForLogin = _ecommerceContext.Users.SingleOrDefault(u => u.Email == email);
-            if (userForLogin != null)
+            if (userForLogin != null && userForLogin.State)
             {
                 if(userForLogin.Password == password)
                 {

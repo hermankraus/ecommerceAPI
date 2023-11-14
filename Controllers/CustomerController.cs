@@ -21,7 +21,7 @@ namespace ecommerceAPI.Controllers
             _customerService = customerService;
         }
 
-        [HttpPost("createOrder/{userId}")]
+        [HttpPost("createOrder/")]
         public ActionResult<Order> CreateOrder(int userId)
         {
             var order = _customerService.CreateOrder(userId);

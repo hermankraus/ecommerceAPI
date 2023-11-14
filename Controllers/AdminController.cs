@@ -39,7 +39,7 @@ namespace ecommerceAPI.Controllers
         }
 
         [HttpPost("AddProduct")]
-        public IActionResult AddProduct(ProductDTO product)
+        public IActionResult AddProduct(AddProductToTableDTO product)
         {
             try
             {
@@ -54,17 +54,22 @@ namespace ecommerceAPI.Controllers
         }
 
         [HttpPut("EditProduct{id}")]
-        public IActionResult EditProduct(int id, Product product)
+        public IActionResult EditProduct(int id, AddProductToTableDTO productdto)
         {
-            if (id != product.Id)
+            var productSelected = _adminService.GetProductById(id);
+            if (id != productSelected.Id)
             {
                 return BadRequest();
             }
 
             try
             {
-                _adminService.EditProduct(product);
-                return NoContent();
+                productSelected.Name = productdto.Name;
+                productSelected.Description = productdto.Description;
+                productSelected.Price = productdto.Price;
+
+                _adminService.EditProduct(productSelected);
+                return Ok("Producto Modificado");
             }
             catch (ArgumentNullException)
             {
@@ -91,9 +96,23 @@ namespace ecommerceAPI.Controllers
             
             return Ok(customers);
         }
+        [HttpPost("CreateNewUserByAdmin")]
+        public IActionResult CreateNewUserByAdmin([FromBody] NewUserFromAdminDTO newUserFromAdminDTO)
+        {
+            if (newUserFromAdminDTO.UserRole == "Admin" || newUserFromAdminDTO.UserRole == "Customer")
+            {
+                _adminService.CreateNewUserFromAdmin(newUserFromAdminDTO);
+
+                return Ok($"New {newUserFromAdminDTO.UserRole} {newUserFromAdminDTO.Name} Created");
+            }
+            return BadRequest("UserRole Incorrect");
+        }    
+            
+            
+            
 
         [HttpPut("UpdateUser/{userId}")]
-        public IActionResult UpdateUser(int userId, [FromBody]UserDTO user)
+        public IActionResult UpdateUser(int userId, [FromBody] NewUserFromAdminDTO user)
         {   
             var userToUpdate = _userService.GetUser(userId);
             if (userToUpdate == null)
@@ -104,11 +123,12 @@ namespace ecommerceAPI.Controllers
             userToUpdate.Email = user.Email;
             userToUpdate.Password = user.Password;
             userToUpdate.Address = user.Address;
+            userToUpdate.State = user.State;
 
             _userService.UpdateUser(userToUpdate);
             return Ok(userToUpdate);
         }
-        [HttpDelete("DeleteUser/")]
+        [HttpDelete("DeleteUser")]
         public IActionResult DeleteUser(int userId)
         {
             _userService.DeleteUser(userId);

@@ -1,4 +1,6 @@
-﻿namespace ecommerceAPI.Models
+﻿using ecommerceAPI.Enums;
+
+namespace ecommerceAPI.Models
 {
     public class OrderDTO
     {
@@ -6,9 +8,9 @@
 
         public DateOnly Date { get; set; }
 
-        public bool Status { get; set; }
+        public OrderStatus StatusOrder { get; set; }
 
 
-        public ICollection<ProductDTO> Products { get; set; } = new List<ProductDTO>(); 
+        public ICollection<AddProductToTableDTO> Products { get; set; } = new List<AddProductToTableDTO>(); 
     }
 }

@@ -6,8 +6,9 @@ public interface IAdminService
 {
     List<Product> GetProducts();
     Product GetProductById(int id);
-    void AddProduct(ProductDTO product);
+    void AddProduct(AddProductToTableDTO product);
     void EditProduct(Product product);
     void DeleteProduct(int id);
+    void CreateNewUserFromAdmin(NewUserFromAdminDTO NewUserFromAdminDTO);
     List<Customer> GetAllCustomers();
 }

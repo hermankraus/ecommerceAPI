@@ -11,6 +11,8 @@ namespace ecommerceAPI.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public int UserId { get; set; }
+        public double TotalPrice { get; set; }
+        public OrderStatus StatusOrder { get; set; }
         public User? User { get; set; }
         public DateTime Date { get; set; } = DateTime.Now.ToUniversalTime();
         public List<OrderProduct>? OrderProducts { get; set; }

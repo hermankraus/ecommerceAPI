@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ecommerceAPI.DBContexts;
 
@@ -10,9 +11,11 @@ using ecommerceAPI.DBContexts;
 namespace ecommerceAPI.Migrations
 {
     [DbContext(typeof(EcommerceContext))]
-    partial class EcommerceContextModelSnapshot : ModelSnapshot
+    [Migration("20231114215644_AddTotalPriceToOrders")]
+    partial class AddTotalPriceToOrders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
@@ -25,9 +28,6 @@ namespace ecommerceAPI.Migrations
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("StatusOrder")
-                        .HasColumnType("INTEGER");
 
                     b.Property<double>("TotalPrice")
                         .HasColumnType("REAL");
@@ -75,9 +75,6 @@ namespace ecommerceAPI.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("REAL");
 
-                    b.Property<bool>("Stock")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
                     b.ToTable("Products");
@@ -88,8 +85,7 @@ namespace ecommerceAPI.Migrations
                             Id = 1,
                             Description = "Test desc",
                             Name = "Test",
-                            Price = 1.25,
-                            Stock = true
+                            Price = 1.25
                         });
                 });
 

@@ -20,10 +20,12 @@ public class CustomerService : ICustomerService, IUserService
 
     public Order CreateOrder(int userId)
     {
+
         var order = new Order
         {
             UserId = userId,
             Date = DateTime.Now,
+            TotalPrice = 0,
             OrderProducts = new List<OrderProduct>()
         };
 

@@ -25,7 +25,7 @@ namespace ecommerceAPI.Services.Implementations
             return _context.Products.FirstOrDefault(p => p.Id == id);
         }
 
-        public void AddProduct(ProductDTO productDTO)
+        public void AddProduct(AddProductToTableDTO productDTO)
         {
             if (productDTO == null)
             {
@@ -65,20 +65,36 @@ namespace ecommerceAPI.Services.Implementations
 
         }
 
-        public void CreateUser(UserDTO userDTO)
+      
+        public void CreateNewUserFromAdmin(NewUserFromAdminDTO newUserDTO)
         {
-            var user = new Admin
+            if (newUserDTO.UserRole == "Admin")
             {
-                Name = userDTO.Name,
-                Email = userDTO.Email,
-                Password = userDTO.Password,
-                Address = userDTO.Address,
-                UserRole = "Admin",
+                var newAdmin = new Admin
+                {
+                    Name = newUserDTO.Name,
+                    Email = newUserDTO.Email,
+                    Password = newUserDTO.Password,
+                    Address = newUserDTO.Address,
+                    UserRole = "Admin",
+                };
+                _context.Add(newAdmin);
+                _context.SaveChanges();
+            }
+            else if (newUserDTO.UserRole == "Customer")
+            {
+                var newCustomer = new Customer
+                {
+                    Name = newUserDTO.Name,
+                    Email = newUserDTO.Email,
+                    Password = newUserDTO.Password,
+                    Address = newUserDTO.Address,
+                    UserRole = "Customer",
+                };
+                _context.Add(newCustomer);
+                _context.SaveChanges();
+            }
 
-            }; 
-                
-            _context.Add(user);
-            _context.SaveChanges();
         }
 
         public void UpdateUser(User userToUpdate)
