@@ -44,6 +44,7 @@ builder.Configuration["DB:ConnectionString"]));
 
 #region Inyecciones
 builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IUserService, AdminService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IUserService, CustomerService>();

@@ -1,11 +1,12 @@
 ﻿using ecommerceAPI.DBContexts;
 using ecommerceAPI.Entities;
 using ecommerceAPI.Models;
+using ecommerceAPI.Services.Interfaces;
 
 namespace ecommerceAPI.Services.Implementations
 {
 
-    public class AdminService : IAdminService
+    public class AdminService : IAdminService, IUserService
     {
         private readonly EcommerceContext _context;
 
@@ -95,6 +96,10 @@ namespace ecommerceAPI.Services.Implementations
             _context.Update(userToDelete);
             _context.SaveChanges();
 
+        }
+        public User GetUser(int userId)
+        {
+            return _context.Users.FirstOrDefault(u => u.Id == userId);
         }
 
         public List<Customer> GetAllCustomers()

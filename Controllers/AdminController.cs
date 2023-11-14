@@ -2,6 +2,7 @@
 using ecommerceAPI.Entities;
 using Microsoft.AspNetCore.Authorization;
 using ecommerceAPI.Models;
+using ecommerceAPI.Services.Interfaces;
 
 namespace ecommerceAPI.Controllers
 {
@@ -11,10 +12,11 @@ namespace ecommerceAPI.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IAdminService _adminService;
-        
-        public AdminController(IAdminService adminService)
+        private readonly IUserService _userService;
+        public AdminController(IAdminService adminService, IUserService userService)
         {
             _adminService = adminService;
+            _userService = userService;
             
         }
 
@@ -88,6 +90,29 @@ namespace ecommerceAPI.Controllers
             var customers = _adminService.GetAllCustomers();
             
             return Ok(customers);
+        }
+
+        [HttpPut("UpdateUser/{userId}")]
+        public IActionResult UpdateUser(int userId, [FromBody]UserDTO user)
+        {   
+            var userToUpdate = _userService.GetUser(userId);
+            if (userToUpdate == null)
+            {
+                return NotFound();
+            }
+            userToUpdate.Name = user.Name;
+            userToUpdate.Email = user.Email;
+            userToUpdate.Password = user.Password;
+            userToUpdate.Address = user.Address;
+
+            _userService.UpdateUser(userToUpdate);
+            return Ok(userToUpdate);
+        }
+        [HttpDelete("DeleteUser/")]
+        public IActionResult DeleteUser(int userId)
+        {
+            _userService.DeleteUser(userId);
+            return NoContent();
         }
     }
 }
