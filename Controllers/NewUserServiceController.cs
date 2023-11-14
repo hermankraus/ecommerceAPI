@@ -25,7 +25,7 @@ namespace ecommerceAPI.Controllers
                 Name = userDTO.Name,
                 Email = userDTO.Email,
                 Password = userDTO.Password,
-                Address = userDTO.Address,
+                Address = userDTO.Address.ToString(),
                 UserRole = "Customer",
 
             };

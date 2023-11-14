@@ -2,8 +2,6 @@
 using ecommerceAPI.Entities;
 using Microsoft.AspNetCore.Authorization;
 using ecommerceAPI.Models;
-using ecommerceAPI.Services.Interfaces;
-using System.Security.Claims;
 
 namespace ecommerceAPI.Controllers
 {
@@ -13,14 +11,10 @@ namespace ecommerceAPI.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IAdminService _adminService;
-        private readonly INewUserService _newUserService;
-        private readonly IUserService _userService;
         
-        public AdminController(IAdminService adminService, INewUserService newUserService, IUserService userService)
+        public AdminController(IAdminService adminService)
         {
             _adminService = adminService;
-            _newUserService = newUserService;
-            _userService = userService;
             
         }
 
@@ -76,7 +70,7 @@ namespace ecommerceAPI.Controllers
             }
         }
 
-        [HttpDelete("DeleteProduct{id}")]
+        [HttpDelete("Delete{id}")]
         public IActionResult DeleteProduct(int id)
         {
             try
@@ -94,61 +88,6 @@ namespace ecommerceAPI.Controllers
             var customers = _adminService.GetAllCustomers();
             
             return Ok(customers);
-        }
-
-        [HttpPut("AdminUpdateCustomer")]
-
-        public IActionResult UpdateCustomer([FromBody] UserDTO updateCustomer, int userId)
-        {
-           
-            var userToUpdate = _userService.GetUser(userId);
-            if (userToUpdate == null)
-            {
-                return BadRequest();
-            }
-            userToUpdate.Name = updateCustomer.Name;
-            userToUpdate.Email = updateCustomer.Email;
-            userToUpdate.Address = updateCustomer.Address;
-            userToUpdate.Password = updateCustomer.Password;
-
-            string role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
-
-            if (role == "Customer")
-            {
-                _userService.UpdateUser(userToUpdate);
-
-                return Ok();
-            }
-            return Forbid();
-        }
-
-        [HttpDelete("AdminDeleteCustomer")]
-
-        public IActionResult DeleteCustomer()
-        {
-            int id = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
-
-            _userService.DeleteUser(id);
-
-            return Ok();
-
-        }
-
-        [HttpPost("AdminCreateNewUser")]
-
-        public ActionResult<User> CreateUser([FromBody] UserDTO userDTO)
-        {
-            var user = new Customer
-            {
-                Name = userDTO.Name,
-                Email = userDTO.Email,
-                Password = userDTO.Password,
-                Address = userDTO.Address,
-                UserRole = "Customer",
-
-            };
-            _newUserService.CreateUser(user);
-            return Ok(user);
         }
     }
 }
