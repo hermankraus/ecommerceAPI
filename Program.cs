@@ -43,6 +43,7 @@ builder.Services.AddDbContext<EcommerceContext>(dbContextOptions => dbContextOpt
 builder.Configuration["DB:ConnectionString"]));
 
 #region Inyecciones
+builder.Services.AddScoped<IUserService, AdminService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
