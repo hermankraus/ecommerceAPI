@@ -3,6 +3,7 @@ using ecommerceAPI.Entities;
 using Microsoft.AspNetCore.Authorization;
 using ecommerceAPI.Models;
 using ecommerceAPI.Services.Interfaces;
+using ecommerceAPI.Enums;
 
 namespace ecommerceAPI.Controllers
 {
@@ -44,7 +45,7 @@ namespace ecommerceAPI.Controllers
             try
             {
                 _adminService.AddProduct(product);
-                //return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
+                
                 return Ok();
             }
             catch (ArgumentNullException)
@@ -90,6 +91,8 @@ namespace ecommerceAPI.Controllers
                 return NotFound();
             }
         }
+
+
         [HttpGet ("GetAllCustomers")]
         public IActionResult GetAllCustomers() {
             var customers = _adminService.GetAllCustomers();
@@ -108,9 +111,7 @@ namespace ecommerceAPI.Controllers
             return BadRequest("UserRole Incorrect");
         }    
             
-            
-            
-
+        
         [HttpPut("UpdateUser/{userId}")]
         public IActionResult UpdateUser(int userId, [FromBody] NewUserFromAdminDTO user)
         {   
@@ -134,5 +135,30 @@ namespace ecommerceAPI.Controllers
             _userService.DeleteUser(userId);
             return NoContent();
         }
+
+        [HttpPut("modifyOrder")]
+
+        public IActionResult ModifyStatusOrder([FromBody] StatusOrderDTO statusOrderDTO)
+        {
+            var orderToModify = _userService.GetOrderByOrderId(statusOrderDTO.orderId);
+
+            if (orderToModify == null)
+            {
+                return NotFound("Orden no existente");
+            }
+
+            orderToModify.StatusOrder = statusOrderDTO.StatusOrder;
+
+            if (orderToModify.StatusOrder == OrderStatus.Approved || orderToModify.StatusOrder == OrderStatus.Waiting || orderToModify.StatusOrder == OrderStatus.Canceled)
+            {
+                _adminService.ModifyStatusOrder(orderToModify);
+                return Ok($"Orden {statusOrderDTO.orderId} {statusOrderDTO.StatusOrder}");
+            }
+            else
+                return BadRequest("Estado no existente");
+
+
+        }
+
     }
 }

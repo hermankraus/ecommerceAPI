@@ -70,6 +70,37 @@ public class CustomerService : ICustomerService, IUserService
         
     }
 
+    public List<ShowProductsOrderDTO> GetOrderHistory(int userId)
+    {
+        var orderHistory = _context.Orders
+            .Where(o => o.UserId == userId)
+            .Include(o => o.OrderProducts)
+            .ThenInclude(op => op.Product)
+            .OrderByDescending(o => o.Date)
+            .ToList();
+
+        List<ShowProductsOrderDTO> orderDTOs = new List<ShowProductsOrderDTO>();
+
+        foreach (var order in orderHistory)
+        {
+            ShowProductsOrderDTO orderDTO = new ShowProductsOrderDTO
+            {
+                Id = order.Id,
+                Date = order.Date,
+                StatusOrder = order.StatusOrder,
+                Products = order.OrderProducts.Select(op => new ProductOrderDTO
+                {
+                    ProductId = op.ProductId,
+                    Quantity = op.Quantity
+                }).ToList()
+            };
+
+            orderDTOs.Add(orderDTO);
+        }
+
+        return orderDTOs;
+    }
+
     public void CancelOrder(Order canceledOrder)
     {
         _context.Update(canceledOrder);
@@ -104,14 +135,4 @@ public class CustomerService : ICustomerService, IUserService
         return(user);
     }
 
-    public List<Order> GetOrderHistory(int userId)
-    {
-        var orders = _context.Orders
-            .Where(o => o.UserId == userId)
-            .Include(o => o.OrderProducts)
-            .ThenInclude(op => op.Product)
-            .ToList();
-
-        return orders;
-    }
 }

@@ -65,7 +65,27 @@ namespace ecommerceAPI.Services.Implementations
 
         }
 
-      
+        public Order GetOrderByOrderId(int orderId)
+        {
+
+            var order = _context.Orders.FirstOrDefault(u => u.Id == orderId);
+
+            if (order != null)
+            {
+                return order;
+            }
+
+            return null;
+
+        }
+
+        public void ModifyStatusOrder(Order modifiedOrder)
+        {
+            _context.Update(modifiedOrder);
+            _context.SaveChanges();
+        }
+
+
         public void CreateNewUserFromAdmin(NewUserFromAdminDTO newUserDTO)
         {
             if (newUserDTO.UserRole == "Admin")

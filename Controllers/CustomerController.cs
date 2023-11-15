@@ -50,7 +50,7 @@ namespace ecommerceAPI.Controllers
 
         public IActionResult CancelOrder([FromBody] int orderId)
         {
-            var orderToCancel = _customerService.GetOrderByOrderId(orderId);
+            var orderToCancel = _userService.GetOrderByOrderId(orderId);
 
             if (orderToCancel == null)
             {
@@ -68,14 +68,19 @@ namespace ecommerceAPI.Controllers
 
 
 
-        [HttpGet("orderHistory/{userId}")]
-        public ActionResult<IEnumerable<Order>> GetOrderHistory(int userId)
+        [HttpGet("orderHistory")]
+        public List<ShowProductsOrderDTO> GetOrderHistory()
         {
-            var orders = _customerService.GetOrderHistory(userId);
-            return Ok(orders);
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+
+            var history = _customerService.GetOrderHistory(userId);
+
+            return history;
         }
 
-   
+
+
+
 
         [HttpPut("UpdateCustomer")]
 

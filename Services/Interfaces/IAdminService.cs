@@ -10,5 +10,6 @@ public interface IAdminService
     void EditProduct(Product product);
     void DeleteProduct(int id);
     void CreateNewUserFromAdmin(NewUserFromAdminDTO NewUserFromAdminDTO);
+    void ModifyStatusOrder(Order modifiedOrder);
     List<Customer> GetAllCustomers();
 }
