@@ -17,7 +17,7 @@ namespace ecommerceAPI.Entities
 
             public bool Stock { get; set; } = true;
 
-            public List<OrderProduct>? OrderProducts { get; set; }
+            public List<OrderProduct> OrderProducts { get; set; }
 
         }
     }

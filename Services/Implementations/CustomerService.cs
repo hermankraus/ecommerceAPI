@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ecommerceAPI.DBContexts;
 using ecommerceAPI.Entities;
+using ecommerceAPI.Enums;
 using ecommerceAPI.Models;
 using ecommerceAPI.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -18,21 +19,39 @@ public class CustomerService : ICustomerService, IUserService
         
     }
 
-    public Order CreateOrder(int userId)
+    public void CreateOrder(int userId, List<ProductOrderDTO> products)
     {
-
-        var order = new Order
+        // Crear una nueva orden
+        Order newOrder = new Order
         {
             UserId = userId,
-            Date = DateTime.Now,
-            TotalPrice = 0,
+            TotalPrice = 0,//CalculateTotalPrice(products)
+            StatusOrder = OrderStatus.Waiting, 
+            Date = DateTime.Now.ToUniversalTime(),
             OrderProducts = new List<OrderProduct>()
         };
 
-        _context.Orders.Add(order);
-        _context.SaveChanges();
 
-        return order;
+        foreach (var productDTO in products)
+        {
+            Product product = _context.Products.Find(productDTO.ProductId);
+
+            if (product != null && product.Stock)
+            {
+                OrderProduct orderProduct = new OrderProduct
+                {
+                    ProductId = product.Id,
+                    Quantity = productDTO.Quantity,
+                    Product = product
+                };
+
+                newOrder.OrderProducts.Add(orderProduct);
+
+            }
+        }
+
+        _context.Orders.Add(newOrder);
+        _context.SaveChanges();
     }
 
     public void AddProductsToOrder(int orderId, List<Product> products, List<int> quantities)

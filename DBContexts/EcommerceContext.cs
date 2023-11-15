@@ -33,6 +33,8 @@ namespace ecommerceAPI.DBContexts
             .Property(op => op.Quantity)
             .IsRequired();
 
+        
+
             modelBuilder.Entity<User>()
                 .HasDiscriminator<string>("UserRole")
                 .HasValue<Customer>("Customer")
@@ -67,7 +69,9 @@ namespace ecommerceAPI.DBContexts
             .HasOne(o => o.User)
             .WithMany(u => u.Order)
             .HasForeignKey(o => o.UserId);
-
+        modelBuilder.Entity<Order>()
+                 .Property(o => o.StatusOrder)
+                 .HasConversion<string>();
 
             modelBuilder.Entity<Product>().HasData(
                 new Product

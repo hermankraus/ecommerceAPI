@@ -22,13 +22,30 @@ namespace ecommerceAPI.Controllers
         }
 
         [HttpPost("createOrder/")]
-        public ActionResult<Order> CreateOrder(int userId)
+        public IActionResult CreateOrder([FromBody] OrderRequestDTO orderRequest)
         {
-            var order = _customerService.CreateOrder(userId);
-            return CreatedAtAction(nameof(order), new { id = order.Id }, order);
+            if (orderRequest == null || orderRequest.Products == null || orderRequest.Products.Count == 0)
+            {
+                return BadRequest("Orden Invalida");
+            }
+
+            try
+            {
+                
+                int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+
+                _customerService.CreateOrder(userId, orderRequest.Products);
+
+                return Ok("La orden se creo con exito");
+            }
+            catch (Exception ex)
+            {
+                
+                return StatusCode(500, $"Error creando la orden: {ex.Message}");
+            }
         }
 
-        [HttpPost("addProductsToOrder/{orderId}")]
+            [HttpPost("addProductsToOrder/{orderId}")]
         public IActionResult AddProductsToOrder(int orderId, [FromBody] OrderProductsRequest request)
         {
             if (request == null || request.Products == null || request.Quantities == null
