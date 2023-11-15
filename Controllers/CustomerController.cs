@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using ecommerceAPI.Services.Interfaces;
 using System.Security.Claims;
 using ecommerceAPI.Models;
+using ecommerceAPI.Enums;
 
 namespace ecommerceAPI.Controllers
 {
@@ -45,25 +46,27 @@ namespace ecommerceAPI.Controllers
             }
         }
 
-            [HttpPost("addProductsToOrder/{orderId}")]
-        public IActionResult AddProductsToOrder(int orderId, [FromBody] OrderProductsRequest request)
+        [HttpPut("cancelOrder")]
+
+        public IActionResult CancelOrder([FromBody] int orderId)
         {
-            if (request == null || request.Products == null || request.Quantities == null
-                || request.Products.Count != request.Quantities.Count)
+            var orderToCancel = _customerService.GetOrderByOrderId(orderId);
+
+            if (orderToCancel == null)
             {
-                return BadRequest("La solicitud es inválida.");
+                return NotFound("Orden no existente");
             }
 
-            try
-            {
-                _customerService.AddProductsToOrder(orderId, request.Products, request.Quantities);
-                return NoContent();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            orderToCancel.StatusOrder = OrderStatus.Canceled;
+
+            _customerService.CancelOrder(orderToCancel);
+
+
+            return Ok($"Orden {orderId} Cancelada");
         }
+
+
+
 
         [HttpGet("orderHistory/{userId}")]
         public ActionResult<IEnumerable<Order>> GetOrderHistory(int userId)

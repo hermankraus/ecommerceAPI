@@ -4,6 +4,7 @@ using ecommerceAPI.Models;
 public interface ICustomerService
 {
     void CreateOrder(int userId, List<ProductOrderDTO> products);
-    void AddProductsToOrder(int orderId, List<Product> products, List<int> quantities);
+    Order GetOrderByOrderId(int orderId);
+    void CancelOrder(Order canceledOrder);
     List<Order> GetOrderHistory(int userId);
 }

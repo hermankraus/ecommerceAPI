@@ -6,6 +6,7 @@ using ecommerceAPI.Entities;
 using ecommerceAPI.Enums;
 using ecommerceAPI.Models;
 using ecommerceAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 public class CustomerService : ICustomerService, IUserService
@@ -54,31 +55,24 @@ public class CustomerService : ICustomerService, IUserService
         _context.SaveChanges();
     }
 
-    public void AddProductsToOrder(int orderId, List<Product> products, List<int> quantities)
+    
+    public Order GetOrderByOrderId(int orderId)
     {
-        if (products == null || quantities == null || products.Count != quantities.Count)
+
+        var order = _context.Orders.FirstOrDefault(u => u.Id == orderId);
+        
+        if (order != null)
         {
-            throw new ArgumentException("La lista de productos y cantidades no coincide.");
+            return order;
         }
 
-        var order = _context.Orders.FirstOrDefault(o => o.Id == orderId);
+        return null;
+        
+    }
 
-        if (order == null)
-        {
-            throw new ArgumentException($"No se encontró la orden con ID {orderId}.");
-        }
-
-        for (int i = 0; i < products.Count; i++)
-        {
-            var orderProduct = new OrderProduct
-            {
-                Product = products[i],
-                Quantity = quantities[i]
-            };
-            order.OrderProducts.Add(orderProduct);
-        }
-
-        _context.Orders.Update(order);
+    public void CancelOrder(Order canceledOrder)
+    {
+        _context.Update(canceledOrder);
         _context.SaveChanges();
     }
 
