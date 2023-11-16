@@ -153,4 +153,9 @@ public class CustomerService : ICustomerService, IUserService
         return(user);
     }
 
+    public User GetUserById(int userId)
+    {
+        return _context.Users.FirstOrDefault(u => u.Id == userId);
+    }
+
 }

@@ -8,6 +8,7 @@ namespace ecommerceAPI.Services.Interfaces
         public void UpdateUser (User user);
         public void DeleteUser (int userId);
         public User GetUser(int userId);
+        public User GetUserById (int userId);
         public Order GetOrderByOrderId(int orderId);
     }
 }

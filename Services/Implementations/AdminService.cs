@@ -135,6 +135,17 @@ namespace ecommerceAPI.Services.Implementations
         }
         public User GetUser(int userId)
         {
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+            if (user == null)
+            {
+                return null;
+            }
+            return (user);
+        }
+
+        public User GetUserById (int userId)
+        {
             return _context.Users.FirstOrDefault(u => u.Id == userId);
         }
 

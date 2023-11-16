@@ -124,11 +124,27 @@ namespace ecommerceAPI.Controllers
 
         }
 
+        [HttpGet("GetUserById")]
+
+        public IActionResult GetUserById()
+        {
+            int id = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+
+            var userToShow = _userService.GetUserById(id);
+
+            UserDTO userDTO = new UserDTO()
+            {
+                Name = userToShow.Name,
+                Email = userToShow.Email,
+                Password = userToShow.Password,
+                Address = userToShow.Address,
+            };
+
+
+            return Ok(userDTO);
+
+        }
+
     }
 }
 
-public class OrderProductsRequest
-{
-    public List<Product> Products { get; set; }
-    public List<int> Quantities { get; set; }
-}

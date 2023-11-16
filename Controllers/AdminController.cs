@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using ecommerceAPI.Models;
 using ecommerceAPI.Services.Interfaces;
 using ecommerceAPI.Enums;
+using System.Security.Claims;
 
 namespace ecommerceAPI.Controllers
 {
@@ -78,7 +79,7 @@ namespace ecommerceAPI.Controllers
             }
         }
 
-        [HttpDelete("Delete{id}")]
+        [HttpDelete("DeleteProduct/{id}")]
         public IActionResult DeleteProduct(int id)
         {
             try
@@ -109,9 +110,30 @@ namespace ecommerceAPI.Controllers
                 return Ok($"New {newUserFromAdminDTO.UserRole} {newUserFromAdminDTO.Name} Created");
             }
             return BadRequest("UserRole Incorrect");
-        }    
+        }
+
+        [HttpGet("GetUserById")]
+
+        public IActionResult GetUserById() 
+        {
+            int id = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+
+            var userToShow = _userService.GetUserById(id);
+
+            UserDTO userDTO = new UserDTO()
+            {
+                Name = userToShow.Name,
+                Email = userToShow.Email,
+                Password = userToShow.Password,
+                Address = userToShow.Address,
+            };
             
-        
+
+            return Ok(userDTO);
+
+        }
+
+
         [HttpPut("UpdateUser/{userId}")]
         public IActionResult UpdateUser(int userId, [FromBody] NewUserFromAdminDTO user)
         {   
