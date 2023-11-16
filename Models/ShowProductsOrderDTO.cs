@@ -10,7 +10,7 @@ namespace ecommerceAPI.Models
 
         public OrderStatus StatusOrder { get; set; }
 
-
+        public double TotalPrice { get; set; }
         public ICollection<ProductOrderDTO> Products { get; set; } = new List<ProductOrderDTO>();
     }
 }

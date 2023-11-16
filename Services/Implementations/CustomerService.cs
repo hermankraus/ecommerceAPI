@@ -22,11 +22,11 @@ public class CustomerService : ICustomerService, IUserService
 
     public void CreateOrder(int userId, List<ProductOrderDTO> products)
     {
-        // Crear una nueva orden
+        
         Order newOrder = new Order
         {
             UserId = userId,
-            TotalPrice = 0,//CalculateTotalPrice(products)
+            TotalPrice = TotalPrice(products),
             StatusOrder = OrderStatus.Waiting, 
             Date = DateTime.Now.ToUniversalTime(),
             OrderProducts = new List<OrderProduct>()
@@ -70,6 +70,23 @@ public class CustomerService : ICustomerService, IUserService
         
     }
 
+    private double TotalPrice(List<ProductOrderDTO> products)
+    {
+        double totalPrice = 0;
+
+        foreach (var productDTO in products)
+        {
+            Product product = _context.Products.Find(productDTO.ProductId);
+
+            if (product != null && product.Stock)
+            {
+                totalPrice += product.Price * productDTO.Quantity;
+            }
+        }
+
+        return totalPrice;
+    }
+
     public List<ShowProductsOrderDTO> GetOrderHistory(int userId)
     {
         var orderHistory = _context.Orders
@@ -91,8 +108,9 @@ public class CustomerService : ICustomerService, IUserService
                 Products = order.OrderProducts.Select(op => new ProductOrderDTO
                 {
                     ProductId = op.ProductId,
-                    Quantity = op.Quantity
-                }).ToList()
+                    Quantity = op.Quantity,
+                }).ToList(),
+                TotalPrice= order.TotalPrice,
             };
 
             orderDTOs.Add(orderDTO);
